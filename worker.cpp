@@ -7,6 +7,7 @@ Worker::Worker(QThread *parent) : QThread(parent)
 }
 void Worker::run()
 {
+    countAll=0;
     loadFile();
     finishedData=new QList<DataBase*>;
     while(!data.empty())
@@ -68,7 +69,7 @@ void Worker::loadFile()
 
                     ba.remove("\r");
                     ba.remove("\n");
-                    data.append(ba);
+                    data.append(ba.toLatin1());
 
                 }
 
@@ -83,14 +84,14 @@ void Worker::loadFile()
 }
 void Worker::saveFile()
 {
-    for(int i=0;i<finishedData->count();i++)
+    while(!finishedData->empty())
     {
-        QString filename=qApp->applicationDirPath()+"/sav/"+finishedData->at(i)->fileName+".csv";
+        QString filename=qApp->applicationDirPath()+"/sav/"+finishedData->first()->fileName+".csv";
 
         QFile file(filename);
         if(file.open(QIODevice::WriteOnly|QIODevice::Append))
         {
-            file.write(finishedData->at(i)->fileData.toLatin1());
+            file.write(finishedData->first()->fileData);
             file.flush();
             file.close();
             qDebug()<<filename<<"ok";
@@ -99,7 +100,18 @@ void Worker::saveFile()
         {
             qDebug()<<filename<<"error";
         }
+        delete finishedData->first();
+        finishedData->removeFirst();
+
     }
+    workdir.clear();
+    countSec=0;
+
+    data.clear();
+
+
+    finishedData->clear();
+    delete finishedData;
 
 
 }

@@ -10,7 +10,7 @@ struct DataBase
 {
     DataBase() {}
     QString fileName;
-    QString fileData;
+    QByteArray fileData;
 };
 class Worker : public QThread
 {
@@ -20,7 +20,7 @@ public:
     QString workdir;
     int countSec=0;
     int countAll=0;
-    QStringList data;
+    QList<QByteArray> data;
 
 
     QList<DataBase*> *finishedData;

@@ -19,9 +19,7 @@ MainWindow::MainWindow(QWidget *parent) :
     }
     connect(&refTimer,SIGNAL(timeout()),this,SLOT(refState()));
 
-    QString str("hello world");
-    QByteArray ba("hello world");
-    qDebug()<<sizeof(str)<<sizeof(ba);
+
 }
 
 MainWindow::~MainWindow()
@@ -44,6 +42,7 @@ void MainWindow::on_pushButton_2_clicked()
 {
     ui->pushButton->setEnabled(false);
     ui->lineEdit->setEnabled(false);
+    ui->pushButton_2->setEnabled(false);
     startTime=QTime::currentTime();
 
 
@@ -77,5 +76,8 @@ void MainWindow::refState()
     {
         ui->label->setText(msg);
     }
+    ui->pushButton->setEnabled(true);
+    ui->lineEdit->setEnabled(true);
+    ui->pushButton_2->setEnabled(true);
 
 }
