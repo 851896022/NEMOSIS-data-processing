@@ -63,21 +63,31 @@ void MainWindow::refState()
     msg= QString::number(h)+"小时"+QString::number(m%60)+"分"+QString::number(s%60)+"秒"+QString::number(ms%1000)+"毫秒";
     if(worker.isFinished())
     {
-        msg+="  总共处理了"+QString::number(worker.countAll)+"行";
+        msg+="\r\n总共处理了"+QString::number(worker.countAll)+"行";
+        msg+="\r\n平均速度"+QString::number(worker.countAll/(ms*1.0)*1000.0)+"行/秒";
         refTimer.stop();
+        ui->pushButton->setEnabled(true);
+        ui->lineEdit->setEnabled(true);
+        ui->pushButton_2->setEnabled(true);
 
     }
     else
     {
-        msg+="  当前效率"+QString::number(worker.countSec*10)+"行/秒";
-        worker.countSec=0;
+        if(worker.countSec==0)
+        {
+            msg+="  正在保存到文件....";
+        }
+        else
+        {
+            msg+="  当前效率"+QString::number((worker.countSec*10.0))+"行/秒";
+            worker.countSec=0;
+        }
+
     }
     if(worker.countAll>0)
     {
         ui->label->setText(msg);
     }
-    ui->pushButton->setEnabled(true);
-    ui->lineEdit->setEnabled(true);
-    ui->pushButton_2->setEnabled(true);
+
 
 }
